@@ -7,6 +7,8 @@
 #include "include/message.hpp"
 #include "include/calcul.hpp"
 
+// Public
+
 Message::Message() : 
 	m_boardID (s2bin ("0000")),
 	m_function (s2bin ("0000000")),
@@ -36,7 +38,7 @@ void Message::setBoardID(const char* boardID)
 	m_boardID = s2bin (boardID);
 }
 
-u32 Message::getBoardID()
+u32 Message::getBoardID() const
 {
 	return m_boardID;
 }
@@ -47,12 +49,12 @@ void Message::setFunction(const char* function)
 	m_parityFunction = bitsParity (m_function);
 }
 
-u32 Message::getFunction()
+u32 Message::getFunction() const
 {
 	return m_function;
 }
 
-u32 Message::getParityFunction()
+u32 Message::getParityFunction() const
 {
 	return m_parityFunction;
 }
@@ -63,17 +65,24 @@ void Message::setData(const char* data)
 	m_parityData = bitsParity (m_data);
 }
 
-u32 Message::getData()
+u32 Message::getData() const
 {
 	return m_data;
 }
 
-u32 Message::getParityData()
+u32 Message::getParityData() const
 {
 	return m_parityData;
 }
 
-u32 Message::sendMessage()
+void Message::createMessage(const char* boardID, const char* function, const char* data)
+{
+	Message::setBoardID (boardID);
+	Message::setFunction (function);
+	Message::setData (data);
+}
+
+u32 Message::sendMessage() const
 {
 	u32 msg = 0;
 	msg = (m_parityData) | (m_data << 1) | (m_parityFunction << 21) | (m_function << 22) | (m_boardID << 28);
@@ -82,11 +91,11 @@ u32 Message::sendMessage()
 
 void Message::receiveMessage(u32 msg)
 {
-	u32 maskID = s2bin("11110000000000000000000000000000");
-	u32 maskFunction = s2bin("1111110000000000000000000000");
-	u32 maskParityFunction = s2bin("1000000000000000000000");
-	u32 maskData = s2bin("111111111111111111110");
-	u32 maskParityData = s2bin("1");
+	u32 maskID = s2bin ("11110000000000000000000000000000");
+	u32 maskFunction = s2bin ("1111110000000000000000000000");
+	u32 maskParityFunction = s2bin ("1000000000000000000000");
+	u32 maskData = s2bin ("111111111111111111110");
+	u32 maskParityData = s2bin ("1");
 
 	m_boardID = (msg & maskID) >> 28;
 	m_function = (msg & maskFunction) >> 22;
@@ -95,7 +104,40 @@ void Message::receiveMessage(u32 msg)
 	m_parityData = (msg & maskParityData);
 }
 
-bool Message::isBoard()
+u32 Message::isGood() const
+{
+	if (Message::isBoard () == true)
+	{
+		if (Message::isParityFunction () == true)
+		{
+			if (Message::isFunction () == true)
+			{
+				if (Message::isParityData () == true)
+				{
+					if (Message::isData () == true)
+						return 0;
+					else
+						return 5;
+				}
+				else
+					return 4;
+			}
+			else
+				return 3;
+		}
+		else
+			return 2;
+	}
+	else
+		return 1;
+}
+
+Message::~Message()
+{}
+
+// Private
+
+bool Message::isBoard() const
 {
 	if (bitsCount (m_boardID) == 1)
 	{
@@ -108,30 +150,25 @@ bool Message::isBoard()
 		return false;
 }
 
-bool Message::isFunction()
+bool Message::isFunction() const
 {
-	if (bitsCount (m_function) == 1)
-	{
-		// switch (m_function)
-		// {
-		// 	case s2bin ("0000000") : // Correspond à la fonction
-		// 		return true;
-		// 		break;
+	// switch (m_function)
+	// {
+	// 	case s2bin ("0000000") : // Correspond à la fonction
+	// 		return true;
+	// 		break;
 
-		// 	case s2bin ("0000001") : // Correspond à la fonction
-		// 		return true;
-		// 		break;
+	// 	case s2bin ("0000001") : // Correspond à la fonction
+	// 		return true;
+	// 		break;
 
-		// 	default :
-		// 		return false;
-		// }
-		return true;
-	}
-	else
-		return false;
+	// 	default :
+	// 		return false;
+	// }
+	return true;
 }
 
-bool Message::isParityFunction()
+bool Message::isParityFunction() const
 {
 	if (bitsParity (m_function) == m_parityFunction)
 		return true;
@@ -139,7 +176,7 @@ bool Message::isParityFunction()
 		return false;
 }
 
-bool Message::isData()
+bool Message::isData() const
 {
 	// switch (m_data)
 	// {
@@ -161,13 +198,10 @@ bool Message::isData()
 	return true;
 }
 
-bool Message::isParityData()
+bool Message::isParityData() const
 {
 	if (bitsParity (m_data) == m_parityData)
 		return true;
 	else
 		return false;
 }
-
-Message::~Message()
-{}

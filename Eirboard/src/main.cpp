@@ -61,14 +61,17 @@ int main(int, char**)
 
   // Création du message
   Message sending;
-  sending.setBoardID ("1001");
-  sending.setFunction ("100101");
-  sending.setData ("00001000000100000001");
+  sending.createMessage ("0011", "00100000", "0011001001010");
+  UART_2.write ((u8*) &sending, sizeof (sending));
+  UART_2.write ((u8*) "\n\r", 2);
   Message receiving;
   receiving.receiveMessage (s2bin ("00011001011000010000001000000011"));
+  UART_2.write ((u8*) &receiving, sizeof (receiving));
+  UART_2.write ((u8*) "\n\r", 2);
 
   while(1)
   {
+
     // u32 a = s2bin ("1000001");
     // UART_1 << s2bin ("1000001") << " " << bitsCount (a) << " " << bitsParity (a) << "\n\r";
     // UART_1 << "Sending message : " << sending.sendMessage () << " || Verification : " << s2bin ("00011001011000010000001000000011") << "\n\r";
@@ -87,13 +90,17 @@ int main(int, char**)
     // UART_2.write((u8*) "\n\r", 2);
 
     u32 buffer;
-    UART_2.read((u8*) &buffer, sizeof (buffer));
-    receiving.receiveMessage (buffer);    
+    UART_2.read ((u8*) &buffer, sizeof (buffer));
+    receiving.receiveMessage (buffer);
+    UART_2.write ((u8*) &buffer, sizeof (buffer));
+    UART_2.write ((u8*) "\n\r", 2);
     UART_1 << "Receiving message : " << receiving.sendMessage () << " || Verification : " << buffer << "\n\r";
-    UART_2.write((u8*) &buffer, sizeof (buffer));
-    UART_2.write((u8*) "\n\r", 2);
-    UART_2.write((u8*) "--------------------", 20);
-    UART_2.write((u8*) "\n\r", 2);
+    if (receiving.isGood () != 0)
+    {
+      UART_1 << "Error message : " << receiving.isGood () << "\n\r";
+    }
+    else
+      UART_1 << "Receiving message, || BoardID : " << receiving.getBoardID () << " || Function : " << receiving.getFunction () << " || Data : " << receiving.getData () << " ||\n\r";
   }
 
   return 0;
