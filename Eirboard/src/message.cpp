@@ -106,16 +106,21 @@ void Message::receiveMessage(u32 msg)
 
 u32 Message::isGood() const
 {
-	if (Message::isBoard () == true)
+	if (Message::getBoardID () != 15)
 	{
-		if (Message::isParityFunction () == true)
+		if (Message::isBoard () == true)
 		{
-			if (Message::isFunction () == true)
+			if (Message::isParityFunction () == true)
 			{
-				if (Message::isParityData () == true)
+				if (Message::isFunction () == true)
 				{
-					if (Message::isData () == true)
-						return 0;
+					if (Message::isParityData () == true)
+					{
+						if (Message::isData () == true)
+							return 0;
+						else
+							return 6;
+					}
 					else
 						return 5;
 				}
@@ -154,11 +159,158 @@ bool Message::isFunction() const
 {
 	// switch (m_function)
 	// {
-	// 	case s2bin ("0000000") : // Correspond à la fonction
+	// // "DEPLACEMENT" function 1
+	// 	case s2bin ("0000001") : // Move the robot
 	// 		return true;
 	// 		break;
 
-	// 	case s2bin ("0000001") : // Correspond à la fonction
+	// // "POSITION" function 2
+	// 	case s2bin ("0000010") : // Return the robot's relative position
+	// 		return true;
+	// 		break;
+
+	// // "ORIGIN" function 3
+	// 	case s2bin ("0000011") : // Change the robot's relative position
+	// 		return true;
+	// 		break;
+
+	// // "READ GP2_1" function 4
+	// 	case s2bin ("0000100") : // Return the concerned GP2's value
+	// 		return true;
+	// 		break;
+
+	// // "READ GP2_2" function 5
+	// 	case s2bin ("0000101") : // Return the concerned GP2's value
+	// 		return true;
+	// 		break;
+
+	// // "READ GP2_3" function 6
+	// 	case s2bin ("0000110") : // Return the concerned GP2's value
+	// 		return true;
+	// 		break;
+
+	// // "READ GP2_4" function 7
+	// 	case s2bin ("0000111") : // Return the concerned GP2's value
+	// 		return true;
+	// 		break;
+
+	// // "READ GP2_5" function 8
+	// 	case s2bin ("0001000") : // Return the concerned GP2's value
+	// 		return true;
+	// 		break;
+
+	// // "READ GP2_6" function 9
+	// 	case s2bin ("0001001") : // Return the concerned GP2's value
+	// 		return true;
+	// 		break;
+
+	// // "READ GP2_7" function 10
+	// 	case s2bin ("0001010") : // Return the concerned GP2's value
+	// 		return true;
+	// 		break;
+
+	// // "READ GP2_8" function 11
+	// 	case s2bin ("0001011") : // Return the concerned GP2's value
+	// 		return true;
+	// 		break;
+
+	// // "PROG SERVO_1" function 12
+	// 	case s2bin ("0001100") : // Affect the concerned servo's value
+	// 		return true;
+	// 		break;
+
+	// // "PROG SERVO_2" function 13
+	// 	case s2bin ("0001101") : // Affect the concerned servo's value
+	// 		return true;
+	// 		break;
+
+	// // "PROG SERVO_3" function 14
+	// 	case s2bin ("0001110") : // Affect the concerned servo's value
+	// 		return true;
+	// 		break;
+
+	// // "PROG SERVO_4" function 15
+	// 	case s2bin ("0001111") : // Affect the concerned servo's value
+	// 		return true;
+	// 		break;
+
+	// // "PROG SERVO_5" function 16
+	// 	case s2bin ("0010000") : // Affect the concerned servo's value
+	// 		return true;
+	// 		break;
+
+	// // "PROG SERVO_6" function 17
+	// 	case s2bin ("0010001") : // Affect the concerned servo's value
+	// 		return true;
+	// 		break;
+
+	// // "PROG SERVO_7" function 18
+	// 	case s2bin ("0010010") : // Affect the concerned servo's value
+	// 		return true;
+	// 		break;
+
+	// // "PROG SERVO_8" function 19
+	// 	case s2bin ("0010011") : // Affect the concerned servo's value
+	// 		return true;
+	// 		break;
+
+	// // "READ SERVO_1" function 20
+	// 	case s2bin ("0010100") : // Read the concerned servo's value
+	// 		return true;
+	// 		break;
+
+	// // "READ SERVO_2" function 21
+	// 	case s2bin ("0010101") : // Read the concerned servo's value
+	// 		return true;
+	// 		break;
+
+	// // "READ SERVO_3" function 22
+	// 	case s2bin ("0010110") : // Read the concerned servo's value
+	// 		return true;
+	// 		break;
+
+	// // "READ SERVO_4" function 23
+	// 	case s2bin ("0010111") : // Read the concerned servo's value
+	// 		return true;
+	// 		break;
+
+	// // "READ SERVO_5" function 24
+	// 	case s2bin ("0011000") : // Read the concerned servo's value
+	// 		return true;
+	// 		break;
+
+	// // "READ SERVO_6" function 25
+	// 	case s2bin ("0011001") : // Read the concerned servo's value
+	// 		return true;
+	// 		break;
+
+	// // "READ SERVO_7" function 26
+	// 	case s2bin ("0011010") : // Read the concerned servo's value
+	// 		return true;
+	// 		break;
+
+	// // "READ SERVO_8" function 27
+	// 	case s2bin ("0011011") : // Read the concerned servo's value
+	// 		return true;
+	// 		break;
+
+	// // "P ASSERV" function 28
+	// 	case s2bin ("0011100") : // Change the Proportionnal asserv' value
+	// 		return true;
+	// 		break;
+
+	// // "I ASSERV" function 29
+	// 	case s2bin ("0011101") : // Change the Integral asserv' value
+	// 		return true;
+	// 		break;
+
+	// // "D ASSERV" function 30
+	// 	case s2bin ("0011110") : // Change the Derivative asserv' value
+	// 		return true;
+	// 		break;
+
+	// // "DEFAULT ASSERV" function 31
+	// 	case s2bin ("0011111") : // Change to the Default asserv' values
 	// 		return true;
 	// 		break;
 

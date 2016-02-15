@@ -34,8 +34,9 @@ struct MySettings : public DefaultUARTStreamSettings {
     static constexpr auto word_size = 8;
 };
 
-// Nom du format Stream de l'UART
+// Nom du format Stream de l'UART "charactère"
 Stream::FormattedUARTStream<MySettings> UART_1;
+// Nom du format Stream de l'UART "binaire"
 Stream::UARTStream<MySettings> UART_2;
 
 
@@ -54,55 +55,62 @@ int main(int, char**)
   GPIO::init (LED_2,settings);
   GPIO::init (LED_3,settings);
   
-  // Utilisation des GPIOs: changement d'états
-  GPIO::toggle (LED_1);
-  GPIO::toggle (LED_2);
-  GPIO::toggle (LED_3);
+  // // Utilisation des GPIOs: changement d'états
+  // GPIO::toggle (LED_1);
+  // GPIO::toggle (LED_2);
+  // GPIO::toggle (LED_3);
 
-  // Création du message
+  // Message creation
   Message sending;
-  sending.createMessage ("0011", "00100000", "0011001001010");
-  UART_2.write ((u8*) &sending, sizeof (sending));
-  UART_2.write ((u8*) "\n\r", 2);
+  sending.createMessage ("0010", "001000", "0011001001010");
   Message receiving;
   receiving.receiveMessage (s2bin ("00011001011000010000001000000011"));
-  UART_2.write ((u8*) &receiving, sizeof (receiving));
-  UART_2.write ((u8*) "\n\r", 2);
+  Message error;
+  error.createMessage ("1111", "111111", "11111111111111111111");
 
   while(1)
   {
+    UART_1 << "=============================================" << "\n\r";
+    UART_1 << "Board listenning, enter your binary message :" << "\n\r";
 
-    // u32 a = s2bin ("1000001");
-    // UART_1 << s2bin ("1000001") << " " << bitsCount (a) << " " << bitsParity (a) << "\n\r";
-    // UART_1 << "Sending message : " << sending.sendMessage () << " || Verification : " << s2bin ("00011001011000010000001000000011") << "\n\r";
-    // UART_1 << "Receiving message : " << receiving.getBoardID () << " = " << s2bin ("0001") << " || " << receiving.getFunction () << " = " << s2bin ("100101") << " || " << receiving.getParityFunction () << " = " << 1 << " || " << receiving.getData () << " = " << s2bin ("00001000000100000001") << " || " << receiving.getParityData () << " = " << 1 << "\n\r";
-    // UART_1 << "\n\r";    
-
-    // u32 var = ((u32)'b'<<24) + ((u32)'\r'<<16) + ((u32)'a'<<8) + (u32)'1';
-    // UART_2.write((u8*) &var, sizeof (var));
-    // UART_2.write((u8*) "\n\r", 2);
-    // UART_2.write((u8*) "--------------------", 20);
-    // UART_2.write((u8*) "\n\r", 2);
-    // u32 var1 = ((u32)'b'<<24) + ((u32)'\r'<<16) + ((u32)'a'<<8) + (u32)'8';
-    // UART_2.write((u8*) &var1, sizeof (var1));
-    // UART_2.write((u8*) "\n\r", 2);
-    // UART_2.write((u8*) "--------------------", 20);
-    // UART_2.write((u8*) "\n\r", 2);
-
+    // Board "free"    
+    GPIO::toggle (LED_1);
+    GPIO::toggle (LED_2);
+    GPIO::toggle (LED_3);
     u32 buffer;
     UART_2.read ((u8*) &buffer, sizeof (buffer));
     receiving.receiveMessage (buffer);
+    UART_1 << "Binary received : ";
     UART_2.write ((u8*) &buffer, sizeof (buffer));
     UART_2.write ((u8*) "\n\r", 2);
-    UART_1 << "Receiving message : " << receiving.sendMessage () << " || Verification : " << buffer << "\n\r";
-    if (receiving.isGood () != 0)
+    UART_1 << "---------------------------------------------" << "\n\r";
+    UART_1 << "Receiving message structure : || BoardID : " << receiving.getBoardID () << " || Function : " << receiving.getFunction () << " || Parity : " << receiving.getParityFunction () << " || Data : " << receiving.getData () << " || Parity : " << receiving.getParityData () << " ||\n\r";
+    
+    // Board "locked"
+    GPIO::toggle (LED_1);
+    GPIO::toggle (LED_2);
+    GPIO::toggle (LED_3);
+    u32 verification = receiving.isGood ();
+    if (verification == 0)
     {
-      UART_1 << "Error message : " << receiving.isGood () << "\n\r";
+      UART_1 << "The message received is good!" << "\n\r"; // "&&&'"
+    }
+    else if (verification == 1)
+    {
+      UART_1 << "Error message occure, resend the previous message!" << "\n\r";
     }
     else
-      UART_1 << "Receiving message, || BoardID : " << receiving.getBoardID () << " || Function : " << receiving.getFunction () << " || Data : " << receiving.getData () << " ||\n\r";
+    {
+      error.createMessage ("1111", "111111", "11111111111111111111");
+      UART_1 << "Error return : " << receiving.isGood () << "\n\r";
+      UART_1 << "Binary error sended : ";
+      UART_2.write ((u8*) &error, sizeof (error));
+      UART_2.write ((u8*) "\n\r", 2);
+      UART_1 << "Integer error sended : " << error.sendMessage () << "\n\r";
+      UART_1 << "Error message structure : || BoardID : " << error.getBoardID () << " || Function : " << error.getFunction () << " || Parity : " << error.getParityFunction () << " || Data : " << error.getData () << " || Parity : " << error.getParityData () << " ||\n\r";
+    }
+    UART_1 << "=============================================" << "\n\r" << "\n\r";
   }
 
   return 0;
- 
 }
