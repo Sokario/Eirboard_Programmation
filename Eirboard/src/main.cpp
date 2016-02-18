@@ -21,9 +21,7 @@ using namespace HAL;
 // Gestion De l'objet UART/USART
 #include <stream/hal/uart_stream.hpp>
 
-using namespace Stream;
-
-struct MySettings : public DefaultUARTStreamSettings {
+struct MySettings : public Stream::HAL::DefaultUARTStreamSettings {
     static constexpr auto& uart = SERIAL_USART3;
     static constexpr auto& tx = D8;
     static constexpr auto& rx = D9;
@@ -34,11 +32,10 @@ struct MySettings : public DefaultUARTStreamSettings {
     static constexpr auto word_size = 8;
 };
 
-// Nom du format Stream de l'UART "charactère"
-Stream::FormattedUARTStream<MySettings> UART_1;
 // Nom du format Stream de l'UART "binaire"
-Stream::UARTStream<MySettings> UART_2;
-
+Stream::HAL::UARTStream<MySettings> UART_2;
+// Nom du format Stream de l'UART "charactère"
+Stream::FormattedStreamDecorator<decltype(UART_2)> UART_1(UART_2);
 
 // Début du programme
 int main(int, char**)
