@@ -37,6 +37,7 @@ Stream::HAL::UARTStream<MySettings> UART_2;
 // Nom du format Stream de l'UART "charactère"
 Stream::FormattedStreamDecorator<decltype(UART_2)> UART_1(UART_2);
 
+
 // Début du programme
 int main(int, char**)
 {

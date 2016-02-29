@@ -156,168 +156,11 @@ bool Message::isBoard() const
 }
 
 bool Message::isFunction() const
-{
-	// switch (m_function)
-	// {
-	// // "DEPLACEMENT" function 1
-	// 	case s2bin ("0000001") : // Move the robot
-	// 		return true;
-	// 		break;
-
-	// // "POSITION" function 2
-	// 	case s2bin ("0000010") : // Return the robot's relative position
-	// 		return true;
-	// 		break;
-
-	// // "ORIGIN" function 3
-	// 	case s2bin ("0000011") : // Change the robot's relative position
-	// 		return true;
-	// 		break;
-
-	// // "READ GP2_1" function 4
-	// 	case s2bin ("0000100") : // Return the concerned GP2's value
-	// 		return true;
-	// 		break;
-
-	// // "READ GP2_2" function 5
-	// 	case s2bin ("0000101") : // Return the concerned GP2's value
-	// 		return true;
-	// 		break;
-
-	// // "READ GP2_3" function 6
-	// 	case s2bin ("0000110") : // Return the concerned GP2's value
-	// 		return true;
-	// 		break;
-
-	// // "READ GP2_4" function 7
-	// 	case s2bin ("0000111") : // Return the concerned GP2's value
-	// 		return true;
-	// 		break;
-
-	// // "READ GP2_5" function 8
-	// 	case s2bin ("0001000") : // Return the concerned GP2's value
-	// 		return true;
-	// 		break;
-
-	// // "READ GP2_6" function 9
-	// 	case s2bin ("0001001") : // Return the concerned GP2's value
-	// 		return true;
-	// 		break;
-
-	// // "READ GP2_7" function 10
-	// 	case s2bin ("0001010") : // Return the concerned GP2's value
-	// 		return true;
-	// 		break;
-
-	// // "READ GP2_8" function 11
-	// 	case s2bin ("0001011") : // Return the concerned GP2's value
-	// 		return true;
-	// 		break;
-
-	// // "PROG SERVO_1" function 12
-	// 	case s2bin ("0001100") : // Affect the concerned servo's value
-	// 		return true;
-	// 		break;
-
-	// // "PROG SERVO_2" function 13
-	// 	case s2bin ("0001101") : // Affect the concerned servo's value
-	// 		return true;
-	// 		break;
-
-	// // "PROG SERVO_3" function 14
-	// 	case s2bin ("0001110") : // Affect the concerned servo's value
-	// 		return true;
-	// 		break;
-
-	// // "PROG SERVO_4" function 15
-	// 	case s2bin ("0001111") : // Affect the concerned servo's value
-	// 		return true;
-	// 		break;
-
-	// // "PROG SERVO_5" function 16
-	// 	case s2bin ("0010000") : // Affect the concerned servo's value
-	// 		return true;
-	// 		break;
-
-	// // "PROG SERVO_6" function 17
-	// 	case s2bin ("0010001") : // Affect the concerned servo's value
-	// 		return true;
-	// 		break;
-
-	// // "PROG SERVO_7" function 18
-	// 	case s2bin ("0010010") : // Affect the concerned servo's value
-	// 		return true;
-	// 		break;
-
-	// // "PROG SERVO_8" function 19
-	// 	case s2bin ("0010011") : // Affect the concerned servo's value
-	// 		return true;
-	// 		break;
-
-	// // "READ SERVO_1" function 20
-	// 	case s2bin ("0010100") : // Read the concerned servo's value
-	// 		return true;
-	// 		break;
-
-	// // "READ SERVO_2" function 21
-	// 	case s2bin ("0010101") : // Read the concerned servo's value
-	// 		return true;
-	// 		break;
-
-	// // "READ SERVO_3" function 22
-	// 	case s2bin ("0010110") : // Read the concerned servo's value
-	// 		return true;
-	// 		break;
-
-	// // "READ SERVO_4" function 23
-	// 	case s2bin ("0010111") : // Read the concerned servo's value
-	// 		return true;
-	// 		break;
-
-	// // "READ SERVO_5" function 24
-	// 	case s2bin ("0011000") : // Read the concerned servo's value
-	// 		return true;
-	// 		break;
-
-	// // "READ SERVO_6" function 25
-	// 	case s2bin ("0011001") : // Read the concerned servo's value
-	// 		return true;
-	// 		break;
-
-	// // "READ SERVO_7" function 26
-	// 	case s2bin ("0011010") : // Read the concerned servo's value
-	// 		return true;
-	// 		break;
-
-	// // "READ SERVO_8" function 27
-	// 	case s2bin ("0011011") : // Read the concerned servo's value
-	// 		return true;
-	// 		break;
-
-	// // "P ASSERV" function 28
-	// 	case s2bin ("0011100") : // Change the Proportionnal asserv' value
-	// 		return true;
-	// 		break;
-
-	// // "I ASSERV" function 29
-	// 	case s2bin ("0011101") : // Change the Integral asserv' value
-	// 		return true;
-	// 		break;
-
-	// // "D ASSERV" function 30
-	// 	case s2bin ("0011110") : // Change the Derivative asserv' value
-	// 		return true;
-	// 		break;
-
-	// // "DEFAULT ASSERV" function 31
-	// 	case s2bin ("0011111") : // Change to the Default asserv' values
-	// 		return true;
-	// 		break;
-
-	// 	default :
-	// 		return false;
-	// }
-	return true;
+{	
+	if (m_function < 32)
+		return true;
+	else
+		return false;
 }
 
 bool Message::isParityFunction() const
@@ -330,24 +173,190 @@ bool Message::isParityFunction() const
 
 bool Message::isData() const
 {
-	// switch (m_data)
-	// {
-	// 	case "000010100101001" : // A modifier
-	// 		return true;
-	// 		break;
+	switch (m_function)
+	{
+	// "DEPLACEMENT" function 1
+		case 1 : // Move the robot
+			return true;
+			break;
 
-	// 	case "000011000100010" : // A modifier
-	// 		return true;
-	// 		break;
+	// "POSITION" function 2
+		case 2 : // Return the robot's relative position
+			return true;
+			break;
 
-	// 	case "100111010100000" : // A modifier
-	// 		return true;
-	// 		break;		
+	// "ORIGIN" function 3
+		case 3 : // Change the robot's relative position
+			return true;
+			break;
 
-	// 	default :
-	// 		return false;
-	// }
-	return true;
+	// "READ GP2_1" function 4
+		case 4 : // Return the concerned GP2's value
+			return true;
+			break;
+
+	// "READ GP2_2" function 5
+		case 5 : // Return the concerned GP2's value
+			return true;
+			break;
+
+	// "READ GP2_3" function 6
+		case 6 : // Return the concerned GP2's value
+			return true;
+			break;
+
+	// "READ GP2_4" function 7
+		case 7 : // Return the concerned GP2's value
+			return true;
+			break;
+
+	// "READ GP2_5" function 8
+		case 8 : // Return the concerned GP2's value
+			return true;
+			break;
+
+	// "READ GP2_6" function 9
+		case 9 : // Return the concerned GP2's value
+			return true;
+			break;
+
+	// "READ GP2_7" function 10
+		case 10 : // Return the concerned GP2's value
+			return true;
+			break;
+
+	// "READ GP2_8" function 11
+		case 11 : // Return the concerned GP2's value
+			return true;
+			break;
+
+	// "PROG SERVO_1" function 12
+		case 12 : // Affect the concerned servo's value
+			if (m_data <= 359)
+				return true;
+			else
+				return false;
+			break;
+
+	// "PROG SERVO_2" function 13
+		case 13 : // Affect the concerned servo's value
+			if (m_data <= 359)
+				return true;
+			else
+				return false;
+			break;
+
+	// "PROG SERVO_3" function 14
+		case 14 : // Affect the concerned servo's value
+			if (m_data <= 359)
+				return true;
+			else
+				return false;
+			break;
+
+	// "PROG SERVO_4" function 15
+		case 15 : // Affect the concerned servo's value
+			if (m_data <= 359)
+				return true;
+			else
+				return false;
+			break;
+
+	// "PROG SERVO_5" function 16
+		case 16 : // Affect the concerned servo's value
+			if (m_data <= 359)
+				return true;
+			else
+				return false;
+			break;
+
+	// "PROG SERVO_6" function 17
+		case 17 : // Affect the concerned servo's value
+			if (m_data <= 359)
+				return true;
+			else
+				return false;
+			break;
+
+	// "PROG SERVO_7" function 18
+		case 18 : // Affect the concerned servo's value
+			if (m_data <= 359)
+				return true;
+			else
+				return false;
+			break;
+
+	// "PROG SERVO_8" function 19
+		case 19 : // Affect the concerned servo's value
+			if (m_data <= 359)
+				return true;
+			else
+				return false;
+			break;
+
+	// "READ SERVO_1" function 20
+		case 20 : // Read the concerned servo's value
+			return true;
+			break;
+
+	// "READ SERVO_2" function 21
+		case 21 : // Read the concerned servo's value
+			return true;
+			break;
+
+	// "READ SERVO_3" function 22
+		case 22 : // Read the concerned servo's value
+			return true;
+			break;
+
+	// "READ SERVO_4" function 23
+		case 23 : // Read the concerned servo's value
+			return true;
+			break;
+
+	// "READ SERVO_5" function 24
+		case 24 : // Read the concerned servo's value
+			return true;
+			break;
+
+	// "READ SERVO_6" function 25
+		case 25 : // Read the concerned servo's value
+			return true;
+			break;
+
+	// "READ SERVO_7" function 26
+		case 26 : // Read the concerned servo's value
+			return true;
+			break;
+
+	// "READ SERVO_8" function 27
+		case 27 : // Read the concerned servo's value
+			return true;
+			break;
+
+	// "P ASSERV" function 28
+		case 28 : // Change the Proportionnal asserv' value
+			return true;
+			break;
+
+	// "I ASSERV" function 29
+		case 29 : // Change the Integral asserv' value
+			return true;
+			break;
+
+	// "D ASSERV" function 30
+		case 30 : // Change the Derivative asserv' value
+			return true;
+			break;
+
+	// "DEFAULT ASSERV" function 31
+		case 31 : // Change to the Default asserv' values
+			return true;
+			break;
+
+		default :
+			return false;
+	}
 }
 
 bool Message::isParityData() const
