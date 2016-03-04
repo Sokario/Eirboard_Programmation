@@ -9,6 +9,8 @@
 #include <hal/pwm.hpp>
 #include <hal/uart.hpp>
 
+#include <device/hal/encoder.hpp>
+
 #include "include/calcul.hpp"
 #include "include/message.hpp"
 
@@ -37,6 +39,27 @@ Stream::HAL::UARTStream<MySettings> UART_2;
 // Nom du format Stream de l'UART "charactère"
 Stream::FormattedStreamDecorator<decltype(UART_2)> UART_1(UART_2);
 
+// Encodeurs
+struct LeftEncoderSettings : public Device::HAL::DefaultEncoderSettings {
+  static constexpr auto& timer = TIMER3; // C'est à vous de configurer
+  static constexpr auto& channel1 = C6;  // C'est à vous de configurer
+  static constexpr auto& channel2 = C7;  // C'est à vous de configurer
+
+  static constexpr auto channel1_polarity = HAL::ENCODER::Polarity::RISING; // Important
+  static constexpr auto channel2_polarity = HAL::ENCODER::Polarity::RISING; // Important
+};
+
+struct RightEncoderSettings : public Device::HAL::DefaultEncoderSettings {
+  static constexpr auto& timer = TIMER3; // C'est à vous de configurer
+  static constexpr auto& channel1 = C6;  // C'est à vous de configurer
+  static constexpr auto& channel2 = C7;  // C'est à vous de configurer
+
+  static constexpr auto channel1_polarity = HAL::ENCODER::Polarity::RISING; // Important
+  static constexpr auto channel2_polarity = HAL::ENCODER::Polarity::RISING; // Important
+};
+
+Device::HAL::Encoder<LeftEncoderSettings> encoder_left;
+Device::HAL::Encoder<RightEncoderSettings> encoder_right;
 
 // Début du programme
 int main(int, char**)
@@ -68,6 +91,9 @@ int main(int, char**)
 
   while(1)
   {
+      UART_1 << "left: " << encoder_left.getValue() << "\n\r";
+
+      /*
     UART_1 << "=============================================" << "\n\r";
     UART_1 << "Board listenning, enter your binary message :" << "\n\r";
 
@@ -108,6 +134,7 @@ int main(int, char**)
       UART_1 << "Error message structure : || BoardID : " << error.getBoardID () << " || Function : " << error.getFunction () << " || Parity : " << error.getParityFunction () << " || Data : " << error.getData () << " || Parity : " << error.getParityData () << " ||\n\r";
     }
     UART_1 << "=============================================" << "\n\r" << "\n\r";
+    */
   }
 
   return 0;
