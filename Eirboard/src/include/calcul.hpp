@@ -4,7 +4,8 @@
 /*                                                   */
 /*****************************************************/
 
-#pragma once
+#ifndef CALCUL_HPP
+#define CALCUL_HPP
 
 #include <base/integer.hpp>
 
@@ -14,3 +15,5 @@ u32 s2bin(const char *s);
 u32 bitsCount (u32 number);
 
 u32 bitsParity (u32 data);
+
+#endif

@@ -7,6 +7,8 @@
 #include "include/message.hpp"
 #include "include/calcul.hpp"
 
+#define SERVO_LIMIT 180
+
 // Public
 
 Message::Message() : 
@@ -159,6 +161,8 @@ bool Message::isFunction() const
 {	
 	if (m_function < 32)
 		return true;
+	else if (m_function == 63)
+		return true;
 	else
 		return false;
 }
@@ -232,7 +236,7 @@ bool Message::isData() const
 
 	// "PROG SERVO_1" function 12
 		case 12 : // Affect the concerned servo's value
-			if (m_data <= 359)
+			if (m_data <= SERVO_LIMIT)
 				return true;
 			else
 				return false;
@@ -240,7 +244,7 @@ bool Message::isData() const
 
 	// "PROG SERVO_2" function 13
 		case 13 : // Affect the concerned servo's value
-			if (m_data <= 359)
+			if (m_data <= SERVO_LIMIT)
 				return true;
 			else
 				return false;
@@ -248,7 +252,7 @@ bool Message::isData() const
 
 	// "PROG SERVO_3" function 14
 		case 14 : // Affect the concerned servo's value
-			if (m_data <= 359)
+			if (m_data <= SERVO_LIMIT)
 				return true;
 			else
 				return false;
@@ -256,7 +260,7 @@ bool Message::isData() const
 
 	// "PROG SERVO_4" function 15
 		case 15 : // Affect the concerned servo's value
-			if (m_data <= 359)
+			if (m_data <= SERVO_LIMIT)
 				return true;
 			else
 				return false;
@@ -264,7 +268,7 @@ bool Message::isData() const
 
 	// "PROG SERVO_5" function 16
 		case 16 : // Affect the concerned servo's value
-			if (m_data <= 359)
+			if (m_data <= SERVO_LIMIT)
 				return true;
 			else
 				return false;
@@ -272,7 +276,7 @@ bool Message::isData() const
 
 	// "PROG SERVO_6" function 17
 		case 17 : // Affect the concerned servo's value
-			if (m_data <= 359)
+			if (m_data <= SERVO_LIMIT)
 				return true;
 			else
 				return false;
@@ -280,7 +284,7 @@ bool Message::isData() const
 
 	// "PROG SERVO_7" function 18
 		case 18 : // Affect the concerned servo's value
-			if (m_data <= 359)
+			if (m_data <= SERVO_LIMIT)
 				return true;
 			else
 				return false;
@@ -288,7 +292,7 @@ bool Message::isData() const
 
 	// "PROG SERVO_8" function 19
 		case 19 : // Affect the concerned servo's value
-			if (m_data <= 359)
+			if (m_data <= SERVO_LIMIT)
 				return true;
 			else
 				return false;

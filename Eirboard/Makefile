@@ -1,5 +1,6 @@
 AVERSIVE_ROOT=/usr/local/AversivePlusPlus
 MCU=stm32f429zi
+
 NAME=example
 
 TOOLCHAIN=$(shell find $(AVERSIVE_ROOT) -name "$(MCU).cmake")

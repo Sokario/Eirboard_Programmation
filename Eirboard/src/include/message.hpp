@@ -4,7 +4,8 @@
 /*                                                   */
 /*****************************************************/
 
-#pragma once
+#ifndef MESSAGE_HPP
+#define MESSAGE_HPP
 
 #include <base/integer.hpp>
 
@@ -45,3 +46,5 @@ private:
 	u32 m_parityData;
 	bool m_good;
 };
+
+#endif

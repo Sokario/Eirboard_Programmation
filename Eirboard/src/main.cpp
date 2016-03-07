@@ -4,6 +4,18 @@
 /*                                                   */
 /*****************************************************/
 
+/*****************************************************/
+/*                 Valeur Remarquable                */
+/*                    STM32F429ZI                    */
+/*                                                   */
+/*             "&&&'" => 2 28 1 201491 0             */
+/*             "***'" => 2 28 1 333077 0             */
+/*                                                   */
+/*****************************************************/
+
+#define COMM
+// #define ASSERV
+
 #include <hal/gpio.hpp>
 #include <hal/timer.hpp>
 #include <hal/pwm.hpp>
@@ -75,6 +87,11 @@ int main(int, char**)
   GPIO::init (LED_1,settings);
   GPIO::init (LED_2,settings);
   GPIO::init (LED_3,settings);
+
+  TIMER::Settings timer_settings;
+  timer_settings.period = 100000;
+  TIMER::init(TIMER2,timer_settings);
+  TIMER::start(TIMER2);
   
   // // Utilisation des GPIOs: changement d'états
   // GPIO::toggle (LED_1);
@@ -89,17 +106,25 @@ int main(int, char**)
   Message error;
   error.createMessage ("1111", "111111", "11111111111111111111");
 
+  static char on = '0';
+  TIMER::setOverflowHandler(TIMER2,[](){
+    if (on == '1')
+      GPIO::toggle (LED_2);
+  });
+
   while(1)
   {
+    #ifdef ASSERV
       UART_1 << "left: " << encoder_left.getValue() << "\n\r";
+    #endif
 
-      /*
+    #ifdef COMM
     UART_1 << "=============================================" << "\n\r";
     UART_1 << "Board listenning, enter your binary message :" << "\n\r";
 
     // Board "free"    
     GPIO::toggle (LED_1);
-    GPIO::toggle (LED_2);
+    // GPIO::toggle (LED_2);
     GPIO::toggle (LED_3);
     u32 buffer;
     UART_2.read ((u8*) &buffer, sizeof (buffer));
@@ -112,12 +137,19 @@ int main(int, char**)
     
     // Board "locked"
     GPIO::toggle (LED_1);
-    GPIO::toggle (LED_2);
+    // GPIO::toggle (LED_2);
     GPIO::toggle (LED_3);
     u32 verification = receiving.isGood ();
     if (verification == 0)
     {
       UART_1 << "The message received is good!" << "\n\r"; // "&&&'"
+      if (receiving.getFunction () == 28)
+      {
+        if (receiving.getData () == 201491)
+          on = '1';
+        else if (receiving.getData () == 333077)
+          on = '0';
+      }
     }
     else if (verification == 1)
     {
@@ -134,7 +166,7 @@ int main(int, char**)
       UART_1 << "Error message structure : || BoardID : " << error.getBoardID () << " || Function : " << error.getFunction () << " || Parity : " << error.getParityFunction () << " || Data : " << error.getData () << " || Parity : " << error.getParityData () << " ||\n\r";
     }
     UART_1 << "=============================================" << "\n\r" << "\n\r";
-    */
+    #endif
   }
 
   return 0;
