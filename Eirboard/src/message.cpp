@@ -15,8 +15,8 @@ Message::Message() :
 	m_boardID (s2bin ("0000")),
 	m_function (s2bin ("0000000")),
 	m_parityFunction (s2bin ("0")),
-	m_data(s2bin ("0000000000000000000")),
-	m_parityData(s2bin ("0"))
+	m_data (s2bin ("0000000000000000000")),
+	m_parityData (s2bin ("0"))
 {}
 
 Message::Message(u32 boardID, u32 function, u32 data) : 
@@ -24,16 +24,22 @@ Message::Message(u32 boardID, u32 function, u32 data) :
 	m_function (function),
 	m_parityFunction (s2bin ("0")),
 	m_data (data),
-	m_parityData(s2bin ("0"))
-{}
+	m_parityData (s2bin ("0"))
+{
+	m_parityFunction = bitsParity (m_function);
+	m_parityData = bitsParity (m_data);
+}
 
 Message::Message(char* boardID, char* function, char* data) : 
-	m_boardID(s2bin (boardID)),
-	m_function(s2bin (function)),
-	m_parityFunction(s2bin ("0")),
-	m_data(s2bin (data)),
-	m_parityData(s2bin ("0"))
-{}
+	m_boardID (s2bin (boardID)),
+	m_function (s2bin (function)),
+	m_parityFunction (s2bin ("0")),
+	m_data (s2bin (data)),
+	m_parityData (s2bin ("0"))
+{
+	m_parityFunction = bitsParity (m_function);
+	m_parityData = bitsParity (m_data);	
+}
 
 void Message::setBoardID(const char* boardID)
 {
@@ -75,13 +81,6 @@ u32 Message::getData() const
 u32 Message::getParityData() const
 {
 	return m_parityData;
-}
-
-void Message::createMessage(const char* boardID, const char* function, const char* data)
-{
-	Message::setBoardID (boardID);
-	Message::setFunction (function);
-	Message::setData (data);
 }
 
 u32 Message::sendMessage() const

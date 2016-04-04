@@ -18,7 +18,7 @@ u32 s2bin(const char *s)
     return i;
 }
 
-u32 bitsCount (u32 n)
+u32 bitsCount(u32 n)
 {
     u32 c = 0;
     while(n != 0){

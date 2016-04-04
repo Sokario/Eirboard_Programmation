@@ -10,46 +10,27 @@
 /*                                                   */
 /*             "&&&'" => 2 28 1 201491 0             */
 /*             "***'" => 2 28 1 333077 0             */
+/*             ";;;'" => 2 28 1 892317 0             */
+/*             ",,,'" => 2 28 1 398870 0             */
+/*             ">>>'" => 2 28 1 991007 0             */
+/*             "111'" => 2 28 1 563352 0             */
 /*                                                   */
 /*****************************************************/
 
 #define COMM
 // #define ASSERV
 
-#include <hal/gpio.hpp>
+// #include <hal/gpio.hpp>
 #include <hal/timer.hpp>
 #include <hal/pwm.hpp>
-#include <hal/uart.hpp>
+// #include <hal/uart.hpp>
 
 #include <device/hal/encoder.hpp>
 
-#include "include/calcul.hpp"
-#include "include/message.hpp"
-
-#define LED_1 B0
-#define LED_2 B7
-#define LED_3 B14
+#include "include/define.hpp"
+#include "include/communication.hpp"
 
 using namespace HAL;
-
-// Gestion De l'objet UART/USART
-#include <stream/hal/uart_stream.hpp>
-
-struct MySettings : public Stream::HAL::DefaultUARTStreamSettings {
-    static constexpr auto& uart = SERIAL_USART3;
-    static constexpr auto& tx = D8;
-    static constexpr auto& rx = D9;
-
-    static constexpr auto baudrate = 9600;
-    static constexpr auto parity = UART::Parity::NONE;
-    static constexpr auto stop_bit = UART::StopBit::ONE_BIT;
-    static constexpr auto word_size = 8;
-};
-
-// Nom du format Stream de l'UART "binaire"
-Stream::HAL::UARTStream<MySettings> UART_2;
-// Nom du format Stream de l'UART "charactère"
-Stream::FormattedStreamDecorator<decltype(UART_2)> UART_1(UART_2);
 
 // Encodeurs
 struct LeftEncoderSettings : public Device::HAL::DefaultEncoderSettings {
@@ -93,19 +74,6 @@ int main(int, char**)
   TIMER::init(TIMER2,timer_settings);
   TIMER::start(TIMER2);
   
-  // // Utilisation des GPIOs: changement d'états
-  // GPIO::toggle (LED_1);
-  // GPIO::toggle (LED_2);
-  // GPIO::toggle (LED_3);
-
-  // Message creation
-  Message sending;
-  sending.createMessage ("0010", "001000", "0011001001010");
-  Message receiving;
-  receiving.receiveMessage (s2bin ("00011001011000010000001000000011"));
-  Message error;
-  error.createMessage ("1111", "111111", "11111111111111111111");
-
   static char on = '0';
   TIMER::setOverflowHandler(TIMER2,[](){
     if (on == '1')
@@ -119,53 +87,11 @@ int main(int, char**)
     #endif
 
     #ifdef COMM
-    UART_1 << "=============================================" << "\n\r";
-    UART_1 << "Board listenning, enter your binary message :" << "\n\r";
-
-    // Board "free"    
-    GPIO::toggle (LED_1);
-    // GPIO::toggle (LED_2);
-    GPIO::toggle (LED_3);
-    u32 buffer;
-    UART_2.read ((u8*) &buffer, sizeof (buffer));
-    receiving.receiveMessage (buffer);
-    UART_1 << "Binary received : ";
-    UART_2.write ((u8*) &buffer, sizeof (buffer));
-    UART_2.write ((u8*) "\n\r", 2);
-    UART_1 << "---------------------------------------------" << "\n\r";
-    UART_1 << "Receiving message structure : || BoardID : " << receiving.getBoardID () << " || Function : " << receiving.getFunction () << " || Parity : " << receiving.getParityFunction () << " || Data : " << receiving.getData () << " || Parity : " << receiving.getParityData () << " ||\n\r";
-    
-    // Board "locked"
-    GPIO::toggle (LED_1);
-    // GPIO::toggle (LED_2);
-    GPIO::toggle (LED_3);
-    u32 verification = receiving.isGood ();
-    if (verification == 0)
-    {
-      UART_1 << "The message received is good!" << "\n\r"; // "&&&'"
-      if (receiving.getFunction () == 28)
-      {
-        if (receiving.getData () == 201491)
-          on = '1';
-        else if (receiving.getData () == 333077)
-          on = '0';
-      }
-    }
-    else if (verification == 1)
-    {
-      UART_1 << "Error message occure, resend the previous message!" << "\n\r";
-    }
-    else
-    {
-      error.createMessage ("1111", "111111", "11111111111111111111");
-      UART_1 << "Error return : " << receiving.isGood () << "\n\r";
-      UART_1 << "Binary error sended : ";
-      UART_2.write ((u8*) &error, sizeof (error));
-      UART_2.write ((u8*) "\n\r", 2);
-      UART_1 << "Integer error sended : " << error.sendMessage () << "\n\r";
-      UART_1 << "Error message structure : || BoardID : " << error.getBoardID () << " || Function : " << error.getFunction () << " || Parity : " << error.getParityFunction () << " || Data : " << error.getData () << " || Parity : " << error.getParityData () << " ||\n\r";
-    }
-    UART_1 << "=============================================" << "\n\r" << "\n\r";
+      GPIO::toggle (LED_1);
+      GPIO::toggle (LED_3);
+      comm_rasp(&on);
+      GPIO::toggle (LED_1);
+      GPIO::toggle (LED_3);
     #endif
   }
 

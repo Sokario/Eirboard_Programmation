@@ -25,7 +25,6 @@ public:
 	u32 getData() const;
 	u32 getParityData() const;
 
-	void createMessage(const char* boardID, const char* function, const char* data);
 	u32 sendMessage() const;
 	void receiveMessage(u32 msg);
 	u32 isGood() const;
