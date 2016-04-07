@@ -6,8 +6,7 @@
 
 #include "include/message.hpp"
 #include "include/calcul.hpp"
-
-#define SERVO_LIMIT 180
+#include "include/define.hpp"
 
 // Public
 
