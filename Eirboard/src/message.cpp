@@ -157,7 +157,7 @@ bool Message::isBoard() const
 
 bool Message::isFunction() const
 {	
-	if (m_function < 32)
+	if (m_function < 40)
 		return true;
 	else if (m_function == 63)
 		return true;
@@ -177,182 +177,246 @@ bool Message::isData() const
 {
 	switch (m_function)
 	{
-	// "DEPLACEMENT" function 1
+	// "DEPLACEMENT"
 		case 1 : // Move the robot
 			return true;
 			break;
 
-	// "POSITION" function 2
+	// "POSITION"
 		case 2 : // Return the robot's relative position
 			return true;
 			break;
 
-	// "ORIGIN" function 3
+	// "ORIGIN"
 		case 3 : // Change the robot's relative position
 			return true;
 			break;
 
-	// "READ GP2_1" function 4
-		case 4 : // Return the concerned GP2's value
+	// "PROG GP2_1"
+		case 4 : // Affect the concerned GP2's value
+			if (m_data <= GP2_LIMIT)
+				return true;
+			else
+				return false;
+			break;
+
+	// "PROG GP2_2"
+		case 5 : // Affect the concerned GP2's value
+			if (m_data <= GP2_LIMIT)
+				return true;
+			else
+				return false;
+			break;
+
+	// "PROG GP2_3"
+		case 6 : // Affect the concerned GP2's value
+			if (m_data <= GP2_LIMIT)
+				return true;
+			else
+				return false;
+			break;
+
+	// "PROG GP2_4"
+		case 7 : // Affect the concerned GP2's value
+			if (m_data <= GP2_LIMIT)
+				return true;
+			else
+				return false;
+			break;
+
+	// "PROG GP2_5"
+		case 8 : // Affect the concerned GP2's value
+			if (m_data <= GP2_LIMIT)
+				return true;
+			else
+				return false;
+			break;
+
+	// "PROG GP2_6"
+		case 9 : // Affect the concerned GP2's value
+			if (m_data <= GP2_LIMIT)
+				return true;
+			else
+				return false;
+			break;
+
+	// "PROG GP2_7"
+		case 10 : // Affect the concerned GP2's value
+			if (m_data <= GP2_LIMIT)
+				return true;
+			else
+				return false;
+			break;
+
+	// "PROG GP2_8"
+		case 11 : // Affect the concerned GP2's value
+			if (m_data <= GP2_LIMIT)
+				return true;
+			else
+				return false;
+			break;		
+
+	// "READ GP2_1"
+		case 12 : // Return the concerned GP2's value
 			return true;
 			break;
 
-	// "READ GP2_2" function 5
-		case 5 : // Return the concerned GP2's value
+	// "READ GP2_2"
+		case 13 : // Return the concerned GP2's value
 			return true;
 			break;
 
-	// "READ GP2_3" function 6
-		case 6 : // Return the concerned GP2's value
+	// "READ GP2_3"
+		case 14 : // Return the concerned GP2's value
 			return true;
 			break;
 
-	// "READ GP2_4" function 7
-		case 7 : // Return the concerned GP2's value
+	// "READ GP2_4"
+		case 15 : // Return the concerned GP2's value
 			return true;
 			break;
 
-	// "READ GP2_5" function 8
-		case 8 : // Return the concerned GP2's value
+	// "READ GP2_5"
+		case 16 : // Return the concerned GP2's value
 			return true;
 			break;
 
-	// "READ GP2_6" function 9
-		case 9 : // Return the concerned GP2's value
+	// "READ GP2_6"
+		case 17 : // Return the concerned GP2's value
 			return true;
 			break;
 
-	// "READ GP2_7" function 10
-		case 10 : // Return the concerned GP2's value
+	// "READ GP2_7"
+		case 18 : // Return the concerned GP2's value
 			return true;
 			break;
 
-	// "READ GP2_8" function 11
-		case 11 : // Return the concerned GP2's value
+	// "READ GP2_8"
+		case 19 : // Return the concerned GP2's value
 			return true;
 			break;
 
-	// "PROG SERVO_1" function 12
-		case 12 : // Affect the concerned servo's value
+	// "PROG SERVO_1"
+		case 20 : // Affect the concerned servo's value
 			if (m_data <= SERVO_LIMIT)
 				return true;
 			else
 				return false;
 			break;
 
-	// "PROG SERVO_2" function 13
-		case 13 : // Affect the concerned servo's value
+	// "PROG SERVO_2"
+		case 21 : // Affect the concerned servo's value
 			if (m_data <= SERVO_LIMIT)
 				return true;
 			else
 				return false;
 			break;
 
-	// "PROG SERVO_3" function 14
-		case 14 : // Affect the concerned servo's value
+	// "PROG SERVO_3"
+		case 22 : // Affect the concerned servo's value
 			if (m_data <= SERVO_LIMIT)
 				return true;
 			else
 				return false;
 			break;
 
-	// "PROG SERVO_4" function 15
-		case 15 : // Affect the concerned servo's value
+	// "PROG SERVO_4"
+		case 23 : // Affect the concerned servo's value
 			if (m_data <= SERVO_LIMIT)
 				return true;
 			else
 				return false;
 			break;
 
-	// "PROG SERVO_5" function 16
-		case 16 : // Affect the concerned servo's value
+	// "PROG SERVO_5"
+		case 24 : // Affect the concerned servo's value
 			if (m_data <= SERVO_LIMIT)
 				return true;
 			else
 				return false;
 			break;
 
-	// "PROG SERVO_6" function 17
-		case 17 : // Affect the concerned servo's value
+	// "PROG SERVO_6"
+		case 25 : // Affect the concerned servo's value
 			if (m_data <= SERVO_LIMIT)
 				return true;
 			else
 				return false;
 			break;
 
-	// "PROG SERVO_7" function 18
-		case 18 : // Affect the concerned servo's value
+	// "PROG SERVO_7"
+		case 26 : // Affect the concerned servo's value
 			if (m_data <= SERVO_LIMIT)
 				return true;
 			else
 				return false;
 			break;
 
-	// "PROG SERVO_8" function 19
-		case 19 : // Affect the concerned servo's value
+	// "PROG SERVO_8"
+		case 27 : // Affect the concerned servo's value
 			if (m_data <= SERVO_LIMIT)
 				return true;
 			else
 				return false;
 			break;
 
-	// "READ SERVO_1" function 20
-		case 20 : // Read the concerned servo's value
+	// "READ SERVO_1"
+		case 28 : // Read the concerned servo's value
 			return true;
 			break;
 
-	// "READ SERVO_2" function 21
-		case 21 : // Read the concerned servo's value
+	// "READ SERVO_2"
+		case 29 : // Read the concerned servo's value
 			return true;
 			break;
 
-	// "READ SERVO_3" function 22
-		case 22 : // Read the concerned servo's value
+	// "READ SERVO_3"
+		case 30 : // Read the concerned servo's value
 			return true;
 			break;
 
-	// "READ SERVO_4" function 23
-		case 23 : // Read the concerned servo's value
+	// "READ SERVO_4"
+		case 31 : // Read the concerned servo's value
 			return true;
 			break;
 
-	// "READ SERVO_5" function 24
-		case 24 : // Read the concerned servo's value
+	// "READ SERVO_5"
+		case 32 : // Read the concerned servo's value
 			return true;
 			break;
 
-	// "READ SERVO_6" function 25
-		case 25 : // Read the concerned servo's value
+	// "READ SERVO_6"
+		case 33 : // Read the concerned servo's value
 			return true;
 			break;
 
-	// "READ SERVO_7" function 26
-		case 26 : // Read the concerned servo's value
+	// "READ SERVO_7"
+		case 34 : // Read the concerned servo's value
 			return true;
 			break;
 
-	// "READ SERVO_8" function 27
-		case 27 : // Read the concerned servo's value
+	// "READ SERVO_8"
+		case 35 : // Read the concerned servo's value
 			return true;
 			break;
 
-	// "P ASSERV" function 28
-		case 28 : // Change the Proportionnal asserv' value
+	// "P ASSERV"
+		case 36 : // Change the Proportionnal asserv' value
 			return true;
 			break;
 
-	// "I ASSERV" function 29
-		case 29 : // Change the Integral asserv' value
+	// "I ASSERV"
+		case 37 : // Change the Integral asserv' value
 			return true;
 			break;
 
-	// "D ASSERV" function 30
-		case 30 : // Change the Derivative asserv' value
+	// "D ASSERV"
+		case 38 : // Change the Derivative asserv' value
 			return true;
 			break;
 
-	// "DEFAULT ASSERV" function 31
-		case 31 : // Change to the Default asserv' values
+	// "DEFAULT ASSERV"
+		case 39 : // Change to the Default asserv' values
 			return true;
 			break;
 

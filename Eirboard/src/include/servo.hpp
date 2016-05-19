@@ -13,9 +13,9 @@ class Servo
 {
 public:
 	Servo();
-	Servo(u32 servoID, u32 angle = 0);
+	Servo(const int servoID, u32 angle = 0);
 
-	bool setServoID(u32 servoID);
+	bool setServoID(const int servoID);
 	u32 getServoID() const;
 	bool setAngle(u32 angle);
 	u32 getAngle() const;

@@ -11,6 +11,7 @@
 #include "include/communication.hpp"
 #include "include/calcul.hpp"
 #include "include/message.hpp"
+#include "include/global.hpp"
 
 using namespace HAL;
 
@@ -19,8 +20,8 @@ using namespace HAL;
 
 struct MySettings : public Stream::HAL::DefaultUARTStreamSettings {
     static constexpr auto& uart = SERIAL_USART3;
-    static constexpr auto& tx = D8;
-    static constexpr auto& rx = D9;
+    static constexpr auto& tx = UART_TX;
+    static constexpr auto& rx = UART_RX;
 
     static constexpr auto baudrate = 9600;
     static constexpr auto parity = UART::Parity::NONE;
@@ -56,8 +57,177 @@ void comm_rasp (char *on)
   u32 verification = receiving.isGood ();
   if (verification == 0)
   {
-    UART_1 << "The message received is good!" << "\n\r"; // "&&&'"
-    if (receiving.getFunction () == 28)
+    u32 value = receiving.getData ();
+    UART_1 << "The message received is good!" << "\n\r";
+    if (receiving.getFunction () == 4)
+    {
+      gp2_1.setLimitValue (value);
+      UART_1 << "GP2_1 Data detection changed!" << "\n\r";
+    }
+    else if (receiving.getFunction () == 5)
+    {
+      gp2_2.setLimitValue (value);
+      UART_1 << "GP2_2 Data detection changed!" << "\n\r";
+    }
+    else if (receiving.getFunction () == 6)
+    {
+      gp2_3.setLimitValue (value);
+      UART_1 << "GP2_3 Data detection changed!" << "\n\r";
+    }
+    else if (receiving.getFunction () == 7)
+    {
+      gp2_4.setLimitValue (value);
+      UART_1 << "GP2_4 Data detection changed!" << "\n\r";
+    }
+    else if (receiving.getFunction () == 8)
+    {
+      gp2_5.setLimitValue (value);
+      UART_1 << "GP2_5 Data detection changed!" << "\n\r";
+    }
+    else if (receiving.getFunction () == 9)
+    {
+      gp2_6.setLimitValue (value);
+      UART_1 << "GP2_6 Data detection changed!" << "\n\r";
+    }
+    else if (receiving.getFunction () == 10)
+    {
+      gp2_7.setLimitValue (value);
+      UART_1 << "GP2_7 Data detection changed!" << "\n\r";
+    }
+    else if (receiving.getFunction () == 11)
+    {
+      gp2_8.setLimitValue (value);
+      UART_1 << "GP2_8 Data detection changed!" << "\n\r";
+    }
+    else if (receiving.getFunction () == 12)
+    {
+      value = gp2_1.getDetection ();
+      UART_1 << "GP2_1 Data: " << value << "\n\r";
+      // UART_2.write ((u8*) &value, sizeof (value));
+    }
+    else if (receiving.getFunction () == 13)
+    {
+      value = gp2_2.getDetection ();
+      UART_1 << "GP2_2 Data: " << value << "\n\r";
+      // UART_2.write ((u8*) &value, sizeof (value));
+    }
+    else if (receiving.getFunction () == 14)
+    {
+      value = gp2_3.getDetection ();
+      UART_1 << "GP2_3 Data: " << value << "\n\r";
+      // UART_2.write ((u8*) &value, sizeof (value));
+    }
+    else if (receiving.getFunction () == 15)
+    {
+      value = gp2_4.getDetection ();
+      UART_1 << "GP2_4 Data: " << value << "\n\r";
+      // UART_2.write ((u8*) &value, sizeof (value));
+    }
+    else if (receiving.getFunction () == 16)
+    {
+      value = gp2_5.getDetection ();
+      UART_1 << "GP2_5 Data: " << value << "\n\r";
+      // UART_2.write ((u8*) &value, sizeof (value));
+    }
+    else if (receiving.getFunction () == 17)
+    {
+      value = gp2_6.getDetection ();
+      UART_1 << "GP2_6 Data: " << value << "\n\r";
+      // UART_2.write ((u8*) &value, sizeof (value));
+    }
+    else if (receiving.getFunction () == 18)
+    {
+      value = gp2_7.getDetection ();
+      UART_1 << "GP2_7 Data: " << value << "\n\r";
+      // UART_2.write ((u8*) &value, sizeof (value));
+    }
+    else if (receiving.getFunction () == 19)
+    {
+      value = gp2_8.getDetection ();
+      UART_1 << "GP2_8 Data: " << value << "\n\r";
+      // UART_2.write ((u8*) &value, sizeof (value));
+    }
+    else if (receiving.getFunction () == 20)
+    {
+      servo_1.setAngle (value);
+      UART_1 << "ServoMoteur 1 déplacé!" << "\n\r";
+    }
+    else if (receiving.getFunction () == 21)
+    {
+      servo_2.setAngle (value);
+      UART_1 << "ServoMoteur 2 déplacé!" << "\n\r";
+    }
+    else if (receiving.getFunction () == 22)
+    {
+      servo_3.setAngle (value);
+      UART_1 << "ServoMoteur 3 déplacé!" << "\n\r";
+    }
+    else if (receiving.getFunction () == 23)
+    {
+      servo_4.setAngle (value);
+      UART_1 << "ServoMoteur 4 déplacé!" << "\n\r";
+    }
+    else if (receiving.getFunction () == 24)
+    {
+      servo_5.setAngle (value);
+      UART_1 << "ServoMoteur 5 déplacé!" << "\n\r";
+    }
+    else if (receiving.getFunction () == 25)
+    {
+      servo_6.setAngle (value);
+      UART_1 << "ServoMoteur 6 déplacé!" << "\n\r";
+    }
+    else if (receiving.getFunction () == 26)
+    {
+      servo_7.setAngle (value);
+      UART_1 << "ServoMoteur 7 déplacé!" << "\n\r";
+    }
+    else if (receiving.getFunction () == 27)
+    {
+      servo_8.setAngle (value);
+      UART_1 << "ServoMoteur 8 déplacé!" << "\n\r";
+    }
+    else if (receiving.getFunction () == 28)
+    {
+      value = servo_1.getAngle ();
+      UART_1 << "ServoMoteur 1 Data: " << value << "\n\r";
+    }
+    else if (receiving.getFunction () == 29)
+    {
+      value = servo_2.getAngle ();
+      UART_1 << "ServoMoteur 2 Data: " << value << "\n\r";
+    }
+    else if (receiving.getFunction () == 30)
+    {
+      value = servo_3.getAngle ();
+      UART_1 << "ServoMoteur 3 Data: " << value << "\n\r";
+    }
+    else if (receiving.getFunction () == 31)
+    {
+      value = servo_4.getAngle ();
+      UART_1 << "ServoMoteur 4 Data: " << value << "\n\r";
+    }
+    else if (receiving.getFunction () == 32)
+    {
+      value = servo_5.getAngle ();
+      UART_1 << "ServoMoteur 5 Data: " << value << "\n\r";
+    }
+    else if (receiving.getFunction () == 33)
+    {
+      value = servo_6.getAngle ();
+      UART_1 << "ServoMoteur 6 Data: " << value << "\n\r";
+    }
+    else if (receiving.getFunction () == 34)
+    {
+      value = servo_7.getAngle ();
+      UART_1 << "ServoMoteur 7 Data: " << value << "\n\r";
+    }
+    else if (receiving.getFunction () == 35)
+    {
+      value = servo_8.getAngle ();
+      UART_1 << "ServoMoteur 8 Data: " << value << "\n\r";
+    }
+    else if (receiving.getFunction () == 36)
     {
       if (receiving.getData () == 201491)
         *on = '1';
@@ -71,9 +241,10 @@ void comm_rasp (char *on)
   }
   else
   {
-    UART_1 << "Error return : " << receiving.isGood () << "\n\r";
-    UART_1 << "Binary error sended : ";
+    UART_1 << "Error return : " << verification << "\n\r";
+    UART_1 << "Binary error sended : [";
     UART_2.write ((u8*) &error, sizeof (error));
+    UART_1 << "]";
     UART_2.write ((u8*) "\n\r", 2);
     UART_1 << "Integer error sended : " << error.sendMessage () << "\n\r";
     UART_1 << "Error message structure : || BoardID : " << error.getBoardID () << " || Function : " << error.getFunction () << " || Parity : " << error.getParityFunction () << " || Data : " << error.getData () << " || Parity : " << error.getParityData () << " ||\n\r";
